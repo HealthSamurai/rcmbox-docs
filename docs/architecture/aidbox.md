@@ -1,6 +1,6 @@
 # Aidbox (FHIR Server)
 
-RCMbox is FHIR-native: all clinical and billing data — Patients, Encounters, Claims, CoverageEligibilityRequests, ChargeItems, and custom resources like `BillingCase` and `BillingTask` — are stored and exchanged as FHIR resources. RCMbox ships with [Aidbox](https://docs.aidbox.app) as its default FHIR server, but any FHIR R4-compliant server can be used in its place.
+RCMbox is FHIR-native: all clinical and billing data — Patients, Encounters, Claims, CoverageEligibilityRequests, ChargeItems, and custom resources like `BillingCase` and `BillingTask` — are stored and exchanged as FHIR resources. RCMbox ships with Aidbox as its default FHIR server, but any FHIR R4-compliant server can be used in its place.
 
 ## Why Aidbox by default
 
