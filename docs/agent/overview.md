@@ -25,6 +25,10 @@ RCMbox includes an AI agent that can edit workflows and activities directly in t
 6. The user iterates (more chat turns, re-run, adjust) until satisfied.
 7. The user pushes the branch and opens a pull request in the standard git workflow.
 
+## Bring your own agent
+
+RCMbox ships with Claude Code as the default agent, but the architecture is not locked to it. The agent integration is a thin layer — the API spawns a process scoped to a git worktree and streams the result. You can replace Claude Code with your own AI agent or coding assistant as long as it can operate on files in a given directory and commit changes to git.
+
 ## Isolation
 
 The agent runs with `--cwd /data/worktrees/{branch}`, scoped entirely to that branch's directory. It cannot read or write files outside that worktree. The main branch is always read-only — the agent can only be activated on feature branches.

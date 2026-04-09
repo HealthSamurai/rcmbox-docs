@@ -54,6 +54,3 @@ const { bundle } = await fhirSearch({
 
 ## See also
 
-{% content-ref %}
-[transaction](transaction.md)
-{% endcontent-ref %}

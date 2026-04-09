@@ -1,28 +1,56 @@
 # RCMbox
 
-RCMbox is a headless billing backend for healthcare product teams. It gives you modular, reusable building blocks for billing workflows — configurable to any care model, self-hosted in your own infrastructure, and FHIR-native throughout.
+RCMbox is a headless billing backend that sits between your clinical system and your payers. It provides:
 
-## What you get
+- **[Workflow engine](architecture/overview.md) with [triggers](triggers/overview.md)** — a durable execution engine on top of Temporal that runs billing workflows defined in YAML, triggered by FHIR resource changes, schedules, or API calls.
+- **[Prebuilt RCM workflows](workflows/prebill.md)** — ready-to-use workflows covering the full claims lifecycle: prebill, claim submission, ERA processing, claim status handling, denial management, and balance transfers. All workflows are configurable per client via a git-based [config project](config-project/overview.md).
+- **[RCM data model based on FHIR](fhir/overview.md)** — standard FHIR resources (Claim, ClaimResponse, Coverage, ChargeItem) extended with custom resources (BillingCase, BillingTask, BillingTransmission, BillingAccountTransaction) that track the full billing lifecycle.
+- **[X12 EDI tooling](x12/overview.md)** — a generic X12 parser and builder with reference mappings between X12 transactions (837P, 835, 277) and FHIR resources, customizable per client.
+- **[AI agent](agent/overview.md)** — an integrated AI assistant that can edit workflows and activities through natural language, with support for bringing your own agent.
 
-- **Workflows** — YAML-defined activity trees that run durably on Temporal. Use pre-built templates for claims, ERAs, and remittances, customize any step, or build from scratch with full TypeScript control.
-- **Activities** — a growing library of built-in building blocks: FHIR operations, X12 parsers and builders, EHR integrations (Athena, Cerner), and RCM-specific logic. Extend with your own TypeScript activities at any point.
-- **Validation rules** — configurable claim validation with error, warning, and information severity levels. Every rule is transparent, auditable, and extensible.
-- **Triggers** — start workflows automatically from FHIR resource changes or on a cron/interval schedule.
-- **AI agent** — describe your billing logic in plain English; the agent writes TypeScript code and wires it into your workflows.
+## Architecture
 
-## How it works
+RCMbox consists of four services:
 
-Every process is a **workflow** — a YAML file describing a tree of activities. Each activity is a TypeScript function, either built-in or written by your team. Workflows run on [Temporal](architecture/temporal.md), which provides retries, full execution history, and deduplication.
-
-```mermaid
-graph LR
-    T(Trigger):::blue2 --> W(Workflow):::green2 --> A1(Activity):::neutral1 --> A2(Activity):::neutral1 --> OUT(Result):::violet2
-```
-
-All client-specific logic lives in a **config project** — a git repository with workflow YAMLs, project-specific activities, validation rules, and triggers. Each client gets their own branch. The engine loads the right branch at runtime.
-
-## What's next
+| Service | Role |
+|---------|------|
+| **FHIR Server** | Stores clinical and billing data (Aidbox by default) |
+| **Temporal** | Workflow engine — executes workflows durably with retries and history |
+| **Billing API** | HTTP server — triggers workflows, manages the config project, serves the admin UI |
+| **Billing Worker** | Temporal worker — loads workflow definitions and executes activity scripts |
 
 {% content-ref %}
-[Getting Started](getting-started/overview.md)
+[System Architecture](architecture/overview.md)
 {% endcontent-ref %}
+
+## Config project
+
+All client-specific logic lives in a **config project** — a separate git repository containing:
+
+- `workflows/` — YAML workflow definitions
+- `activities/` — project-specific TypeScript activity scripts
+- `validation-rules/` — validation rule manifests and implementations
+- `triggers/` — subscription and schedule trigger definitions
+
+The Billing API clones and manages this repo. Each client gets their own branch, giving full isolation with a single shared engine.
+
+{% content-ref %}
+[Config Project](config-project/overview.md)
+{% endcontent-ref %}
+
+## How a workflow runs
+
+{% stepper %}
+{% step %}
+A trigger fires — a FHIR resource change, a schedule, or a direct API call — starting a workflow.
+{% endstep %}
+{% step %}
+The Billing Worker loads the workflow YAML from the config project and begins executing activities in order.
+{% endstep %}
+{% step %}
+Each activity reads its inputs from the workflow context (prior activity outputs or trigger input), runs its TypeScript logic, and returns an output.
+{% endstep %}
+{% step %}
+The workflow completes. All inputs, outputs, and intermediate states are recorded in Temporal's execution history.
+{% endstep %}
+{% endstepper %}

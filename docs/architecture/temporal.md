@@ -60,7 +60,7 @@ The worker configures default Temporal activity options:
 | `scheduleToCloseTimeout` | `30s` |
 | `retry.maximumAttempts` | `1` (no retries) |
 
-Per-activity overrides in workflow YAML take precedence. See [Retries and Timeouts](../workflows/retries-and-timeouts.md).
+Per-activity overrides in workflow YAML take precedence.
 
 ## Temporal address
 

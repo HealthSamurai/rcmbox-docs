@@ -48,12 +48,3 @@ Takes `ChargeItem` resources, their `ChargeItemDefinition` pricing, and the `Bil
   children: [evaluate-rules]
 ```
 
-## See also
-
-{% content-ref %}
-[activate-claim](activate-claim.md)
-{% endcontent-ref %}
-
-{% content-ref %}
-[Patient Control Number (PCN)](../../fhir/pcn.md)
-{% endcontent-ref %}

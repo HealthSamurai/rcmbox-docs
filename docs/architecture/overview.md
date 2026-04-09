@@ -2,17 +2,7 @@
 
 RCMbox consists of four services that work together to execute billing workflows.
 
-```mermaid
-graph LR
-    UI(Admin UI):::neutral1 --> API(Billing API):::blue2
-    EXT(External Events):::neutral1 --> API
-    API --> TE(Temporal):::violet2
-    TE --> W(Billing Worker):::green2
-    W --> AX(FHIR Server):::neutral1
-    W --> CP(Config Project):::neutral1
-    API --> AX
-    API --> CP
-```
+![System Architecture](../../assets/architecture/system-architecture.jpg)
 
 ## Services
 

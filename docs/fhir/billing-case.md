@@ -65,10 +65,3 @@ graph LR
 
 ## See also
 
-{% content-ref %}
-[snapshot-billing-case](../reference/activities/snapshot-billing-case.md)
-{% endcontent-ref %}
-
-{% content-ref %}
-[fetch-context](../reference/activities/fetch-context.md)
-{% endcontent-ref %}

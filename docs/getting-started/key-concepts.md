@@ -18,7 +18,7 @@ Activities are either **built-in** (shipped with the worker image) or **project-
 
 The **config project** is a separate git repository that contains everything client-specific: workflow YAMLs, project-specific activity scripts, validation rules, and triggers. Each client gets their own config project.
 
-Within a config project, different environments or feature streams use **branches** — each branch can have its own version of workflows and activities. The running worker picks up the correct branch automatically. This is the [branch-per-client model](../config-project/branching.md).
+Within a config project, different environments or feature streams use **branches** — each branch can have its own version of workflows and activities. The running worker picks up the correct branch automatically. The running worker picks up the correct branch automatically.
 
 ## Trigger
 
@@ -50,10 +50,6 @@ graph LR
 2. The API schedules a Temporal workflow on the `billing` task queue.
 3. The Billing Worker picks it up, loads the workflow YAML from the config project, and executes each activity in order.
 4. Activities read and write data — FHIR resources, external APIs, or anything else their logic requires.
-
-{% content-ref %}
-[Overview](overview.md)
-{% endcontent-ref %}
 
 {% content-ref %}
 [System Architecture](../architecture/overview.md)
