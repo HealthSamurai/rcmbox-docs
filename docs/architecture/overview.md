@@ -2,7 +2,7 @@
 
 RCMbox consists of four services that work together to execute billing workflows.
 
-![System Architecture](../../assets/architecture/system-architecture.jpg)
+![System Architecture](../../assets/architecture/system-architecture.avif)
 
 ## Services
 
